@@ -110,7 +110,6 @@ const MainForm = (props) => {
     const handleProgram = selectedOption => {
         console.log(selectedOption);
         setSelectedProgram(selectedOption);
-
     };
 
     const deleteEnrolment = (enrol) => {
