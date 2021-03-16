@@ -113,9 +113,9 @@ const MainForm = (props) => {
 
     };
 
-    const deleteEnrolment = (orgUnitID, programID) => {
+    const deleteEnrolment = (enrolID) => {
 
-        fetch(`https://covmw.com/namistest/api/enrollments.json?ou=${orgUnitID}&program=${programID}`, {
+        fetch(`https://covmw.com/namistest/api/enrollments/${enrolID}`, {
             method: 'DELETE',
             headers: {
                 'Authorization' : basicAuth,
@@ -136,9 +136,9 @@ const MainForm = (props) => {
         })
     }
 
-    const functionWithPromise = orgUnit => { //a function that returns a promise
+    const functionWithPromise = enrolID => { //a function that returns a promise
 
-        deleteEnrolment(orgUnit.id, selectedProgram.id);
+        deleteEnrolment(enrolID);
         return message;
     }
 
@@ -152,17 +152,39 @@ const MainForm = (props) => {
 
     const handleDeletion = () => {
         toggle();
-        setShowLoading(true);
+        //setShowLoading(true);
         //var progID = selectedProgram.id;
         console.log(flattenedUnits)
         //console.log(progID);
 
         if(flattenedUnits.length !== 0  && selectedProgram !== null){
-            deleteData(flattenedUnits).then((r) =>{
+            var programID = selectedProgram.id;
+
+            var enrollments = [];
+
+            flattenedUnits.map((unit) => {
+                getInstance().then((d2) => {
+                    const endpoint = `enrollments.json?ou=${unit.id}&program=${programID}&fields=enrollment`;
+                    d2.Api.getApi().get(endpoint)
+                        .then((response) => {
+                            console.log(response.enrollments);
+                            enrollments = enrollments.concat(response.enrollments);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                });
+            });
+
+            //console.log(enrollments);
+
+
+            /*
+            deleteData(enrollments).then((r) =>{
                 setShowLoading(false);
             }).catch((err) => {
                 console.log("an error occurred: " + err);
-            });
+            });*/
         } else {
             console.log("things are null");
         }
