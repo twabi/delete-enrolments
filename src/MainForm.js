@@ -38,7 +38,6 @@ const MainForm = (props) => {
     const [alertModal, setAlertModal] = useState(false);
     const [message, setMessage] = useState("");
     const [messageBody, setMessageBody] = useState("");
-    const [enrolArray, setEnrolArray] = useState([]);
 
     getInstance().then(d2 =>{
         setD2(d2);
