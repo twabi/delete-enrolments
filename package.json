@@ -5,7 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
     "@dhis2/app-runtime": "^2.8.0",
-    "@dhis2/d2-ui-header-bar": "^7.1.6",
+    "@dhis2/d2-ui-header-bar": "^5.2.11",
     "@dhis2/ui-core": "^6.5.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -15,7 +15,7 @@
     "bootstrap": "^4.6.0",
     "d2": "^31.1.1",
     "font-awesome": "^4.7.0",
-    "mdbreact": "^5.0.1",
+    "mdbreact": "^4.6.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.2.0",
