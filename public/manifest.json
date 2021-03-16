@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Delete Enrolments",
+  "name": "DHIS2 Delete Enrolments",
   "icons": [
     {
       "src": "favicon.ico",
