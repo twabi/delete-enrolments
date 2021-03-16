@@ -38,6 +38,7 @@ const MainForm = (props) => {
     const [alertModal, setAlertModal] = useState(false);
     const [message, setMessage] = useState("");
     const [messageBody, setMessageBody] = useState("");
+    const [enrolArray, setEnrolArray] = useState([]);
 
     getInstance().then(d2 =>{
         setD2(d2);
@@ -113,8 +114,10 @@ const MainForm = (props) => {
 
     };
 
-    const deleteEnrolment = (enrolID) => {
+    const deleteEnrolment = (enrol) => {
 
+        var enrolID = enrol.enrollment;
+        console.log(enrolID);
         fetch(`https://covmw.com/namistest/api/enrollments/${enrolID}`, {
             method: 'DELETE',
             headers: {
@@ -128,17 +131,19 @@ const MainForm = (props) => {
             .then((result) => {
                 console.log(result);
                 setMessage("Success");
-                setMessageBody("The enrollments for the chosen program and orgUnits were successfully deleted")
+                setMessageBody("The enrollments for the chosen program and orgUnits were successfully deleted");
+                toggleAlert();
             })
             .catch((error) => {
-            setMessage("Error");
-            setMessageBody("Unable to delete due to an error: " + error)
-        })
+                setMessage("Error");
+                setMessageBody("Unable to delete due to an error: " + error)
+                toggleAlert();
+            });
     }
 
-    const functionWithPromise = enrolID => { //a function that returns a promise
+    const functionWithPromise = enrol => { //a function that returns a promise
 
-        deleteEnrolment(enrolID);
+        deleteEnrolment(enrol);
         return message;
     }
 
@@ -163,28 +168,41 @@ const MainForm = (props) => {
             var enrollments = [];
 
             flattenedUnits.map((unit) => {
-                getInstance().then((d2) => {
-                    const endpoint = `enrollments.json?ou=${unit.id}&program=${programID}&fields=enrollment`;
-                    d2.Api.getApi().get(endpoint)
-                        .then((response) => {
-                            console.log(response.enrollments);
-                            enrollments = enrollments.concat(response.enrollments);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                });
+                getInstance()
+                    .then((d2) => {
+                        const endpoint = `enrollments.json?ou=${unit.id}&program=${programID}&fields=enrollment`;
+                        d2.Api.getApi().get(endpoint)
+                            .then((response) => {
+                                console.log(response.enrollments);
+                                enrollments = enrollments.concat(response.enrollments);
+                                //setEnrolArray(enrolArray => [...enrolArray, response.enrollments]);
+                            })
+                            .then(() => {
+                                console.log(enrollments);
+                                if(enrollments.length == 0){
+                                    setMessage("Alert");
+                                    setMessageBody("Unable to delete! No enrolments found for the chosen program or orgUnit.");
+                                    toggleAlert();
+                                }
+                                deleteData(enrollments).then((r) =>{
+                                    setShowLoading(false);
+                                }).catch((err) => {
+                                    console.log("an error occurred: " + err);
+                                });
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    }).then(() => {
+
+                    });
             });
 
             //console.log(enrollments);
 
 
             /*
-            deleteData(enrollments).then((r) =>{
-                setShowLoading(false);
-            }).catch((err) => {
-                console.log("an error occurred: " + err);
-            });*/
+            */
         } else {
             console.log("things are null");
         }
