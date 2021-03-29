@@ -38,6 +38,7 @@ const MainForm = (props) => {
     const [alertModal, setAlertModal] = useState(false);
     const [message, setMessage] = useState("");
     const [messageBody, setMessageBody] = useState("");
+    const [summary, setSummary] = useState([]);
 
     getInstance().then(d2 =>{
         setD2(d2);
@@ -56,8 +57,9 @@ const MainForm = (props) => {
         setPrograms(props.programs);
         setTreeMarkets(props.treeMarkets);
 
-    },[props.organizationalUnits, props.programs, props.d2, props.marketOrgUnits, props.treeMarkets]);
 
+
+    },[summary, props.organizationalUnits, props.programs, props.d2, props.marketOrgUnits, props.treeMarkets]);
 
     const handle = (value, label, extra) => {
         setSearchValue(value)
@@ -128,14 +130,18 @@ const MainForm = (props) => {
             .then(response => response.json())
             .then((result) => {
                 console.log(result);
-                setMessage("Success");
-                setMessageBody("The enrollments for the chosen program and orgUnits were successfully deleted");
-                toggleAlert();
+                //setMessage("Success");
+                //setMessageBody("The enrollments for the chosen program and orgUnits were successfully deleted");
+                //toggleAlert();
+                setSummary(summary => [...summary, {"enrolment": enrolID, "message" : "Successfully deleted"}]);
+
             })
             .catch((error) => {
-                setMessage("Error");
-                setMessageBody("Unable to delete due to an error: " + error)
-                toggleAlert();
+                //setMessage("Error");
+                //setMessageBody("Unable to delete due to an error: " + error)
+                //toggleAlert();
+                setSummary(summary => [...summary, {"enrolment": enrolID, "message" : "Unable to delete due to an error" + error}]);
+
             });
     }
 
@@ -182,8 +188,13 @@ const MainForm = (props) => {
                                     setMessageBody("Unable to delete! No enrolments found for the chosen program or orgUnit.");
                                     toggleAlert();
                                 }
-                                deleteData(enrollments).then((r) =>{
+                                deleteData(enrollments)
+                                    .then((r) =>{
                                     setShowLoading(false);
+                                        console.log(summary);
+                                        setMessage("Operation Complete");
+                                        setMessageBody("A summary of enrolments delete operation: ");
+                                        toggleAlert();
                                 }).catch((err) => {
                                     console.log("an error occurred: " + err);
                                 });
@@ -272,10 +283,24 @@ const MainForm = (props) => {
                                 </MDBContainer>
 
                                 <MDBContainer>
-                                    <MDBModal isOpen={alertModal} toggle={toggleAlert} centered>
+                                    <MDBModal isOpen={alertModal} toggle={toggleAlert} centered size="lg">
                                         <MDBModalHeader toggle={toggleAlert}>{message}</MDBModalHeader>
                                         <MDBModalBody>
-                                            {messageBody}
+                                            <h4 className="mb-3">
+                                                {messageBody}
+                                            </h4>
+
+                                            {summary.map((item) => (
+                                                <MDBCard className="border-dark my-1">
+                                                    <p>Enrolment: {item.enrolment}</p>
+                                                    <p>message: {item.message}</p>
+                                                </MDBCard>
+
+                                            ))}
+
+                                            {summary.length == 0 ? <div>
+                                                <p>Found no enrolments to delete</p>
+                                            </div> : null}
                                         </MDBModalBody>
                                     </MDBModal>
                                 </MDBContainer>
@@ -349,7 +374,10 @@ const MainForm = (props) => {
 
                                 <div className="text-center py-4 mt-2">
 
-                                    <MDBBtn color="cyan" className="text-white" onClick={toggle}>
+                                    <MDBBtn color="cyan" className="text-white" onClick={() => {
+                                        setSummary([])
+                                        toggle();
+                                    }}>
                                         Delete Enrolments{showLoading ? <div className="spinner-border mx-2 text-white spinner-border-sm" role="status">
                                         <span className="sr-only">Loading...</span>
                                     </div> : null}
