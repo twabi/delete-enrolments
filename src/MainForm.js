@@ -11,8 +11,7 @@ import {
     MDBContainer, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader,
     MDBRow,
 } from "mdbreact";
-import {Button, Dropdown, Menu, TreeSelect} from "antd";
-import Select from "react-select";
+import {Select, Button, Dropdown, Menu, TreeSelect} from "antd";
 import {getInstance} from "d2";
 import {DownOutlined} from "@ant-design/icons";
 import Header from "@dhis2/d2-ui-header-bar"
@@ -160,14 +159,15 @@ const MainForm = (props) => {
     }
 
     const handleDeletion = () => {
+        setSummary([]);
         toggle();
         //setShowLoading(true);
         //var progID = selectedProgram.id;
         console.log(flattenedUnits)
         //console.log(progID);
 
-        if(flattenedUnits.length !== 0  && selectedProgram !== null){
-            var programID = selectedProgram.id;
+        if(flattenedUnits.length !== 0  && selectedProgram.length !== 0){
+            var programID = selectedProgram;
 
             var enrollments = [];
 
@@ -310,15 +310,29 @@ const MainForm = (props) => {
                                 <MDBContainer className="pl-5 mt-3">
                                     <MDBRow>
                                         <MDBCol>
-                                            <div className="text-left my-3">
+                                            <div className="text-left my-3 d-flex flex-column">
                                                 <label className="grey-text ml-2">
                                                     <strong>Select Program</strong>
                                                 </label>
-                                                <Select
-                                                    className="mt-2"
-                                                    onChange={handleProgram}
-                                                    options={programs}
-                                                />
+                                                <Select placeholder="select program option"
+                                                        style={{ width: '100%' }}
+                                                        size="large"
+                                                        className="mt-2"
+                                                        showSearch
+                                                        optionFilterProp="children"
+                                                        filterOption={(input, option) =>
+                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                        filterSort={(optionA, optionB) =>
+                                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                        }
+                                                        onChange={handleProgram}>
+                                                    {programs.map((item, index) => (
+                                                        <Select.Option key={index} value={item.id}>{item.displayName}</Select.Option>
+                                                    ))}
+
+                                                </Select>
+
                                             </div>
                                         </MDBCol>
                                         <MDBCol>
@@ -326,9 +340,12 @@ const MainForm = (props) => {
                                             <div className="text-left my-3">
                                                 <label className="grey-text ml-2">
                                                     <strong>Select Organization Unit</strong>
+                                                    {/*
                                                     <Dropdown overlay={orgUnitMenu} className="ml-3">
                                                         <Button size="small">{orgFilter} <DownOutlined /></Button>
                                                     </Dropdown>
+                                                    */}
+
                                                 </label>
 
                                                 {choseFilter ?
