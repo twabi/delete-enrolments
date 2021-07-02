@@ -11,7 +11,7 @@ import {
     MDBContainer, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader,
     MDBRow,
 } from "mdbreact";
-import {Select, Button, Dropdown, Menu, TreeSelect} from "antd";
+import {Select, Button, Dropdown, Menu, TreeSelect, Modal, Spin} from "antd";
 import {getInstance} from "d2";
 import {DownOutlined} from "@ant-design/icons";
 import Header from "@dhis2/d2-ui-header-bar"
@@ -155,6 +155,7 @@ const MainForm = (props) => {
     }
 
     const handleDeletion = () => {
+        //setShowLoad(true)
         setSummary([]);
         toggle();
         //setShowLoading(true);
@@ -167,7 +168,7 @@ const MainForm = (props) => {
 
             var enrollments = [];
 
-            flattenedUnits.map((unit) => {
+            flattenedUnits.map((unit, index) => {
                 getInstance()
                     .then((d2) => {
                         const endpoint = `enrollments.json?ou=${unit.id}&program=${programID}&fields=enrollment`;
@@ -184,13 +185,15 @@ const MainForm = (props) => {
                                     setMessageBody("Unable to delete! No enrolments found for the chosen program or orgUnit.");
                                     toggleAlert();
                                 }
-                                deleteData(enrollments)
-                                    .then((r) =>{
+                                deleteData(enrollments).then((r) =>{
                                     setShowLoading(false);
-                                        console.log(summary);
-                                        setMessage("Operation Complete");
-                                        setMessageBody("A summary of enrolments delete operation: ");
-                                        toggleAlert();
+                                    setShowLoad(false)
+                                    console.log(index, flattenedUnits.length);
+                                    //setShowLoad(false);
+                                    summary.length === 0 && index < flattenedUnits.length-3 ? setShowLoad(true) : setShowLoad(false);
+                                    setMessage("Operation Complete");
+                                    setMessageBody("A summary of enrolments delete operation: ");
+                                    toggleAlert();
                                 }).catch((err) => {
                                     console.log("an error occurred: " + err);
                                 });
@@ -294,9 +297,13 @@ const MainForm = (props) => {
 
                                             ))}
 
-                                            {summary.length === 0 ? <div>
+                                            {showLoad ? <div className="d-flex flex-column text-center">
+                                                <p className="font-italic">Loading</p>
+                                                <Spin size="large" />
+                                            </div> : summary.length === 0 ?<div>
                                                 <p>Found no enrolments to delete</p>
                                             </div> : null}
+
                                         </MDBModalBody>
                                     </MDBModal>
                                 </MDBContainer>
