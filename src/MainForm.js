@@ -213,6 +213,7 @@ const MainForm = (props) => {
             */
         } else {
             console.log("things are null");
+            alert("fields cannot be left empty!!")
         }
 
 
