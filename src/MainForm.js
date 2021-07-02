@@ -38,6 +38,8 @@ const MainForm = (props) => {
     const [message, setMessage] = useState("");
     const [messageBody, setMessageBody] = useState("");
     const [summary, setSummary] = useState([]);
+    const [showResult, setShowResult] = useState(false);
+    const [showLoad, setShowLoad] = useState(false);
 
     getInstance().then(d2 =>{
         setD2(d2);
@@ -129,16 +131,10 @@ const MainForm = (props) => {
             .then(response => response.json())
             .then((result) => {
                 console.log(result);
-                //setMessage("Success");
-                //setMessageBody("The enrollments for the chosen program and orgUnits were successfully deleted");
-                //toggleAlert();
                 setSummary(summary => [...summary, {"enrolment": enrolID, "message" : "Successfully deleted"}]);
 
             })
             .catch((error) => {
-                //setMessage("Error");
-                //setMessageBody("Unable to delete due to an error: " + error)
-                //toggleAlert();
                 setSummary(summary => [...summary, {"enrolment": enrolID, "message" : "Unable to delete due to an error" + error}]);
 
             });
@@ -298,7 +294,7 @@ const MainForm = (props) => {
 
                                             ))}
 
-                                            {summary.length == 0 ? <div>
+                                            {summary.length === 0 ? <div>
                                                 <p>Found no enrolments to delete</p>
                                             </div> : null}
                                         </MDBModalBody>
@@ -328,7 +324,7 @@ const MainForm = (props) => {
                                                         }
                                                         onChange={handleProgram}>
                                                     {programs.map((item, index) => (
-                                                        <Select.Option key={index} value={item.id}>{item.displayName}</Select.Option>
+                                                        <Select.Option key={index} value={item.id}>{item.label}</Select.Option>
                                                     ))}
 
                                                 </Select>
