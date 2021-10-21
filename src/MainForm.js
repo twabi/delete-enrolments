@@ -13,7 +13,6 @@ import {
 } from "mdbreact";
 import {Select, Button, Dropdown, Menu, TreeSelect, Modal, Spin} from "antd";
 import {getInstance} from "d2";
-import {DownOutlined} from "@ant-design/icons";
 import Header from "@dhis2/d2-ui-header-bar"
 
 
@@ -119,7 +118,7 @@ const MainForm = (props) => {
 
         var enrolID = enrol.enrollment;
         console.log(enrolID);
-        fetch(`https://covmw.com/namistest/api/enrollments/${enrolID}`, {
+        fetch(`https://ccdev.org/chistest/api/enrollments/${enrolID}`, {
             method: 'DELETE',
             headers: {
                 'Authorization' : basicAuth,
@@ -206,11 +205,6 @@ const MainForm = (props) => {
                     });
             });
 
-            //console.log(enrollments);
-
-
-            /*
-            */
         } else {
             console.log("things are null");
             alert("fields cannot be left empty!!")
