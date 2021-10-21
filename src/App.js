@@ -38,7 +38,7 @@ function App() {
           })
           .catch((error) => {
             console.log(error);
-            alert("An error occurred: " + error);
+            //alert("An error occurred: " + error);
           });
 
       d2.Api.getApi().get(unitEndpoint)
@@ -71,7 +71,7 @@ function App() {
           })
           .catch((error) => {
             console.log(error);
-            alert("An error occurred: " + error);
+            //alert("An error occurred: " + error);
           });
 
       d2.Api.getApi().get(marketsEndPoint)
@@ -129,8 +129,8 @@ function App() {
 
           })
           .catch((error) => {
-            //console.log(error);
-            alert("An error occurred: " + error);
+            console.log(error);
+            //alert("An error occurred: " + error);
           });
     });
 
