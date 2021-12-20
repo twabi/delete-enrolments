@@ -65,7 +65,7 @@ function App() {
               customID: 'id'
             });
 
-            console.log(tree);
+            //console.log(tree);
             setOrgUnits(tree)
 
           })
@@ -76,7 +76,7 @@ function App() {
 
       d2.Api.getApi().get(marketsEndPoint)
           .then((response) => {
-            //console.log(response.organisationUnits);
+            console.log(response.organisationUnits);
 
             const tempArray = []
             response.organisationUnits.map((item) => {
@@ -145,7 +145,7 @@ function App() {
                         d2={D2}
                         programs={programs}
                         organizationalUnits={orgUnits}
-                        marketOrgUnits={markets}/>
+                        marketOrgUnits={treeMarkets}/>
           )} exact/>
         </Switch>
       </Fragment>

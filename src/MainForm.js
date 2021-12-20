@@ -56,11 +56,11 @@ const MainForm = (props) => {
     useEffect(() => {
         setOrgUnits(props.organizationalUnits);
         setPrograms(props.programs);
-        setTreeMarkets(props.treeMarkets);
+        setTreeMarkets(props.marketOrgUnits);
 
 
 
-    },[summary, props.organizationalUnits, props.programs, props.d2, props.marketOrgUnits, props.treeMarkets]);
+    },[summary, props.organizationalUnits, props.programs, props.d2, props.marketOrgUnits]);
 
     const handle = (value, label, extra) => {
         setSearchValue(value)
