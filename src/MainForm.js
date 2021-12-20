@@ -13,6 +13,7 @@ import {
 } from "mdbreact";
 import {Select, Button, Dropdown, Menu, TreeSelect, Modal, Spin} from "antd";
 import {getInstance} from "d2";
+import {DownOutlined} from "@ant-design/icons";
 import Header from "@dhis2/d2-ui-header-bar"
 
 
@@ -118,7 +119,7 @@ const MainForm = (props) => {
 
         var enrolID = enrol.enrollment;
         console.log(enrolID);
-        fetch(`https://ccdev.org/chistest/api/enrollments/${enrolID}`, {
+        fetch(`https://www.namis.org/main/api/enrollments/${enrolID}`, {
             method: 'DELETE',
             headers: {
                 'Authorization' : basicAuth,
@@ -202,9 +203,14 @@ const MainForm = (props) => {
                             });
                     }).then(() => {
 
-                    });
+                });
             });
 
+            //console.log(enrollments);
+
+
+            /*
+            */
         } else {
             console.log("things are null");
             alert("fields cannot be left empty!!")
@@ -246,163 +252,163 @@ const MainForm = (props) => {
     return (
         <div>
             {D2 && <Header className="mb-5" d2={D2}/>}
-                <MDBBox className="mt-5" display="flex" justifyContent="center" >
-                    <MDBCol className="mb-5 mt-5" md="10">
-                        <MDBCard display="flex" justifyContent="center" className="text-xl-center w-100">
-                            <MDBCardBody>
-                                <MDBCardTitle>
-                                    <strong>Delete Enrolments</strong>
-                                </MDBCardTitle>
+            <MDBBox className="mt-5" display="flex" justifyContent="center" >
+                <MDBCol className="mb-5 mt-5" md="10">
+                    <MDBCard display="flex" justifyContent="center" className="text-xl-center w-100">
+                        <MDBCardBody>
+                            <MDBCardTitle>
+                                <strong>Delete Enrolments</strong>
+                            </MDBCardTitle>
 
-                                <MDBCardText>
-                                    <strong>Select Enrolment Program and Org Unit(s)</strong>
-                                </MDBCardText>
+                            <MDBCardText>
+                                <strong>Select Enrolment Program and Org Unit(s)</strong>
+                            </MDBCardText>
 
-                                {programs.length == 0 ? <div className="spinner-border mx-2 indigo-text spinner-border-sm" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div> : null}
+                            {programs.length == 0 ? <div className="spinner-border mx-2 indigo-text spinner-border-sm" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div> : null}
 
-                                <MDBContainer>
-                                    <MDBModal isOpen={modal} toggle={toggle} centered>
-                                        <MDBModalHeader toggle={toggle}>Confirmation</MDBModalHeader>
-                                        <MDBModalBody>
-                                            All the enrollments for the chosen orgUnit(and it's children) will be deleted.
-                                            Are you sure you want to delete?
-                                        </MDBModalBody>
-                                        <MDBModalFooter>
-                                            <MDBBtn color="secondary" className="mx-1" onClick={toggle}>Cancel</MDBBtn>
-                                            <MDBBtn color="primary" className="mx-1" onClick={handleDeletion}>Delete</MDBBtn>
-                                        </MDBModalFooter>
-                                    </MDBModal>
-                                </MDBContainer>
+                            <MDBContainer>
+                                <MDBModal isOpen={modal} toggle={toggle} centered>
+                                    <MDBModalHeader toggle={toggle}>Confirmation</MDBModalHeader>
+                                    <MDBModalBody>
+                                        All the enrollments for the chosen orgUnit(and it's children) will be deleted.
+                                        Are you sure you want to delete?
+                                    </MDBModalBody>
+                                    <MDBModalFooter>
+                                        <MDBBtn color="secondary" className="mx-1" onClick={toggle}>Cancel</MDBBtn>
+                                        <MDBBtn color="primary" className="mx-1" onClick={handleDeletion}>Delete</MDBBtn>
+                                    </MDBModalFooter>
+                                </MDBModal>
+                            </MDBContainer>
 
-                                <MDBContainer>
-                                    <MDBModal isOpen={alertModal} toggle={toggleAlert} centered size="lg">
-                                        <MDBModalHeader toggle={toggleAlert}>{message}</MDBModalHeader>
-                                        <MDBModalBody>
-                                            <h4 className="mb-3">
-                                                {messageBody}
-                                            </h4>
+                            <MDBContainer>
+                                <MDBModal isOpen={alertModal} toggle={toggleAlert} centered size="lg">
+                                    <MDBModalHeader toggle={toggleAlert}>{message}</MDBModalHeader>
+                                    <MDBModalBody>
+                                        <h4 className="mb-3">
+                                            {messageBody}
+                                        </h4>
 
-                                            {summary.map((item) => (
-                                                <MDBCard className="border-dark my-1">
-                                                    <p>Enrolment: {item.enrolment}</p>
-                                                    <p>message: {item.message}</p>
-                                                </MDBCard>
+                                        {summary.map((item) => (
+                                            <MDBCard className="border-dark my-1">
+                                                <p>Enrolment: {item.enrolment}</p>
+                                                <p>message: {item.message}</p>
+                                            </MDBCard>
 
-                                            ))}
+                                        ))}
 
-                                            {showLoad ? <div className="d-flex flex-column text-center">
-                                                <p className="font-italic">Loading</p>
-                                                <Spin size="large" />
-                                            </div> : summary.length === 0 ?<div>
-                                                <p>Found no enrolments to delete</p>
-                                            </div> : null}
+                                        {showLoad ? <div className="d-flex flex-column text-center">
+                                            <p className="font-italic">Loading</p>
+                                            <Spin size="large" />
+                                        </div> : summary.length === 0 ?<div>
+                                            <p>Found no enrolments to delete</p>
+                                        </div> : null}
 
-                                        </MDBModalBody>
-                                    </MDBModal>
-                                </MDBContainer>
+                                    </MDBModalBody>
+                                </MDBModal>
+                            </MDBContainer>
 
-                                <hr/>
+                            <hr/>
 
-                                <MDBContainer className="pl-5 mt-3">
-                                    <MDBRow>
-                                        <MDBCol>
-                                            <div className="text-left my-3 d-flex flex-column">
-                                                <label className="grey-text ml-2">
-                                                    <strong>Select Program</strong>
-                                                </label>
-                                                <Select placeholder="select program option"
-                                                        style={{ width: '100%' }}
-                                                        size="large"
-                                                        className="mt-2"
-                                                        showSearch
-                                                        optionFilterProp="children"
-                                                        filterOption={(input, option) =>
-                                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                        }
-                                                        filterSort={(optionA, optionB) =>
-                                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                                        }
-                                                        onChange={handleProgram}>
-                                                    {programs.map((item, index) => (
-                                                        <Select.Option key={index} value={item.id}>{item.label}</Select.Option>
-                                                    ))}
+                            <MDBContainer className="pl-5 mt-3">
+                                <MDBRow>
+                                    <MDBCol>
+                                        <div className="text-left my-3 d-flex flex-column">
+                                            <label className="grey-text ml-2">
+                                                <strong>Select Program</strong>
+                                            </label>
+                                            <Select placeholder="select program option"
+                                                    style={{ width: '100%' }}
+                                                    size="large"
+                                                    className="mt-2"
+                                                    showSearch
+                                                    optionFilterProp="children"
+                                                    filterOption={(input, option) =>
+                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                    filterSort={(optionA, optionB) =>
+                                                        optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                                    }
+                                                    onChange={handleProgram}>
+                                                {programs.map((item, index) => (
+                                                    <Select.Option key={index} value={item.id}>{item.label}</Select.Option>
+                                                ))}
 
-                                                </Select>
+                                            </Select>
 
-                                            </div>
-                                        </MDBCol>
-                                        <MDBCol>
+                                        </div>
+                                    </MDBCol>
+                                    <MDBCol>
 
-                                            <div className="text-left my-3">
-                                                <label className="grey-text ml-2">
-                                                    <strong>Select Organization Unit</strong>
-                                                    {/*
+                                        <div className="text-left my-3">
+                                            <label className="grey-text ml-2">
+                                                <strong>Select Organization Unit</strong>
+                                                {
                                                     <Dropdown overlay={orgUnitMenu} className="ml-3">
                                                         <Button size="small">{orgFilter} <DownOutlined /></Button>
                                                     </Dropdown>
-                                                    */}
+                                                    }
 
-                                                </label>
+                                            </label>
 
-                                                {choseFilter ?
-                                                    <TreeSelect
-                                                        style={{ width: '100%' }}
-                                                        value={treeValue}
-                                                        className="mt-2"
-                                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto'}}
-                                                        treeData={treeMarkets}
-                                                        allowClear
-                                                        size="large"
-                                                        placeholder="Please select organizational unit"
-                                                        onChange={handleTree}
-                                                        onSelect={onSelectTree}
-                                                        showSearch={true}
-                                                    />
-                                                    :
-                                                    <TreeSelect
-                                                        style={{ width: '100%' }}
-                                                        value={searchValue}
-                                                        className="mt-2"
-                                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                        treeData={orgUnits}
-                                                        allowClear
-                                                        size="large"
-                                                        placeholder="Please select organizational unit"
-                                                        onChange={handle}
-                                                        onSelect={onSelect}
-                                                        showSearch={true}
-                                                    />
+                                            {choseFilter ?
+                                                <TreeSelect
+                                                    style={{ width: '100%' }}
+                                                    value={treeValue}
+                                                    className="mt-2"
+                                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto'}}
+                                                    treeData={treeMarkets}
+                                                    allowClear
+                                                    size="large"
+                                                    placeholder="Please select organizational unit"
+                                                    onChange={handleTree}
+                                                    onSelect={onSelectTree}
+                                                    showSearch={true}
+                                                />
+                                                :
+                                                <TreeSelect
+                                                    style={{ width: '100%' }}
+                                                    value={searchValue}
+                                                    className="mt-2"
+                                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                    treeData={orgUnits}
+                                                    allowClear
+                                                    size="large"
+                                                    placeholder="Please select organizational unit"
+                                                    onChange={handle}
+                                                    onSelect={onSelect}
+                                                    showSearch={true}
+                                                />
 
-                                                }
+                                            }
 
-                                            </div>
-                                        </MDBCol>
-                                    </MDBRow>
+                                        </div>
+                                    </MDBCol>
+                                </MDBRow>
 
-                                    <MDBRow className="mt-4">
+                                <MDBRow className="mt-4">
 
-                                    </MDBRow>
+                                </MDBRow>
 
-                                </MDBContainer>
+                            </MDBContainer>
 
-                                <div className="text-center py-4 mt-2">
+                            <div className="text-center py-4 mt-2">
 
-                                    <MDBBtn color="cyan" className="text-white" onClick={() => {
-                                        setSummary([])
-                                        toggle();
-                                    }}>
-                                        Delete Enrolments{showLoading ? <div className="spinner-border mx-2 text-white spinner-border-sm" role="status">
-                                        <span className="sr-only">Loading...</span>
-                                    </div> : null}
-                                    </MDBBtn>
-                                </div>
+                                <MDBBtn color="cyan" className="text-white" onClick={() => {
+                                    setSummary([])
+                                    toggle();
+                                }}>
+                                    Delete Enrolments{showLoading ? <div className="spinner-border mx-2 text-white spinner-border-sm" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : null}
+                                </MDBBtn>
+                            </div>
 
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                </MDBBox>
+                        </MDBCardBody>
+                    </MDBCard>
+                </MDBCol>
+            </MDBBox>
         </div>
     )
 }

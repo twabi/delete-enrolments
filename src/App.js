@@ -43,7 +43,7 @@ function App() {
 
       d2.Api.getApi().get(unitEndpoint)
           .then((response) => {
-            //console.log(response.organisationUnits)
+            console.log(response.organisationUnits)
 
             response.organisationUnits.map((item, index) => {
               //
@@ -144,7 +144,6 @@ function App() {
               <MainForm {...props}
                         d2={D2}
                         programs={programs}
-                        treeMarkets={treeMarkets}
                         organizationalUnits={orgUnits}
                         marketOrgUnits={markets}/>
           )} exact/>
